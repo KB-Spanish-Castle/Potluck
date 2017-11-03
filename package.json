@@ -23,6 +23,8 @@
     "create-react-native-app": "^1.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "mobx": "^3.3.1",
+    "mobx-react": "^4.3.4",
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.12.4",
     "node-fetch": "^1.7.3",

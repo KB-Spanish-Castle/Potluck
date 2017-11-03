@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Col, Button, CardSubtitle, FormGroup, Label, Input, Card, CardBody, CardTitle } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import './Login.css';
 
-class Login extends Component {
+var Login = observer(class Login extends Component {
   constructor() {
     super();
     this.inputemailChange = this.inputemailChange.bind(this);
@@ -24,17 +25,7 @@ class Login extends Component {
   }
 
   testFunc(a, b) {
-    this.props.submitLogin(a, b).then((user) => {
-      if (user.found) {
-        this.props.history.push("/main");
-      } else {
-        this.setState({
-          message: user.message
-        })
-      }
-    }, (e) => {
-      console.log(e);
-    });
+    this.props.userStore.submitLogin(a, b);
   }
 
   _handleKeyPress(e) {
@@ -66,6 +57,6 @@ class Login extends Component {
       </div>
     );
   };
-}
+});
 
-export default withRouter(Login);
+export default withRouter(inject('userStore')(Login));

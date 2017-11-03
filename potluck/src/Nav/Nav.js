@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Collapse, Button, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import './Nav.css'
+import {inject, observer} from 'mobx-react';
 
-class Navvy extends Component {
+
+var Navvy = observer( class Navvy extends Component {
   constructor(props) {
     super(props)
     this.toggle = this.toggle.bind(this);
@@ -20,14 +22,14 @@ class Navvy extends Component {
   }
 
   navLogOut() {
-    this.props.logOut()
+    this.props.userStore.logOut()
       .then(() => {
         this.props.history.push("/login");
       })
   }
 
-  render() {
-    if (this.props.currentUser.firstName) {
+  render() {        
+    if (this.props.userStore.retrieveUser) {
       return (
         <div id="navvy">
           <Navbar light expand="md">
@@ -36,7 +38,7 @@ class Navvy extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" left navbar>
                 <NavItem>
-                  <Link to="/profile" style={{ color: 'black' }}>Hello, {this.props.currentUser.firstName}!</Link>
+                  <Link to="/profile" style={{ color: 'black' }}>Hello, { this.props.userStore.retrieveUser.firstName }!</Link>
                 </NavItem>
                 <NavItem>
                   <Link to="/house" style={{ color: 'black' }} >Create List</Link>
@@ -73,7 +75,7 @@ class Navvy extends Component {
       )
     }
   }
-}
+})
 
-export default withRouter(Navvy);
+export default withRouter(inject("userStore")(Navvy));
 

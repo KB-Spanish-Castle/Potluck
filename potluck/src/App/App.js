@@ -7,17 +7,17 @@ import Navvy from "../Nav/Nav.js";
 import House from "../CreateHouse/CreateHouse.js";
 import JoinHouse from "../JoinHouse/JoinHouse.js";
 import Timer from "../timer.js";
+import {Provider} from "mobx-react"
 import {
   BrowserRouter as Router,
   Route,
 } from 'react-router-dom';
+import UserStore from "../stores/UserStore";
 var axios = require('axios');
 
 class App extends Component {
   constructor() {
     super();
-    this.submitLogin = this.submitLogin.bind(this)
-    this.logOut = this.logOut.bind(this)
     this.state = {
       email: "",
       password: "",
@@ -39,46 +39,21 @@ class App extends Component {
     })
   }
 
-  submitLogin(a, b) {
-    return new Promise((resolve, reject) => {
-      axios.post('/login', {
-        username: a,
-        password: b,
-      }).then((res) => {
-        if (res.data.success) {
-          this.setState({
-            currentUser: res.data
-          });
-        }
-        resolve(res.data);
-      });
-    });
-  }
-
-  logOut() {
-    return new Promise((resolve, reject) => {
-      axios.post('/logout').then((res) => {
-        this.setState({
-          currentUser: res.data
-        });
-        resolve(res.data);
-      })
-    }
-    )
-  }
+ 
   render() {
     return (
-      <Router>
-        <div className='bg'>
-          <Route path='/' render={() => <Navvy logOut={this.logOut} currentUser={this.state.currentUser} />} />
-          <Route path='/Login' render={() => <Login submitLogin={this.submitLogin} />} />
-          <Route path='/Signup' render={() => <SignUp />} />
-          <Route path='/Main' render={() => <Main user={this.state.currentUser} />} />
-          <Route path='/House' render={() => <House />} />
-          <Route path='/Join-House' render={() => <JoinHouse />} />
-        </div>
-      </Router>
-
+      <Provider userStore={new UserStore()}>
+          <Router>
+            <div className='bg'>
+              <Route path='/' render={() => <Navvy   />} />
+              <Route path='/Login' render={() => <Login  />} />
+              <Route path='/Signup' render={() => <SignUp />} />
+              <Route path='/Main' render={() => <Main user={this.statse.currentUser} />} />
+              <Route path='/House' render={() => <House />} />
+              <Route path='/Join-House' render={() => <JoinHouse />} />
+            </div>
+          </Router>
+      </Provider>
     )
   }
 }
